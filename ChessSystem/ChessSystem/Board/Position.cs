@@ -1,5 +1,5 @@
 ﻿
-namespace Board {
+namespace board {
    internal class Position {
       public int Line {
          get; private set;
@@ -18,7 +18,7 @@ namespace Board {
 
       public override string ToString( ) {
          
-         return $"Position: {Line} , {Columm}";
+         return $"position: {Line} , {Columm}";
       }
    }
 }

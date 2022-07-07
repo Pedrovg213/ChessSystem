@@ -1,5 +1,5 @@
 ﻿using System;
-using Board;
+using board;
 
 namespace ChessSystem {
    internal class Program {
