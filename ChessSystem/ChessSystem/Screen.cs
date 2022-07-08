@@ -9,13 +9,18 @@ namespace ChessSystem {
          for ( int i = 0; i < _board.Lines; i++ ) {
             for ( int j = 0; j < _board.Columns; j++ ) {
 
-               if (_board.Pieces(i, j) != null)
-                  Console.Write( _board.Pieces( i , j ) + " ");
-               else
-                  Console.Write("- ");
+               WriteBoard( _board , i , j );
             }
+
             Console.WriteLine();
          }
+      }
+      static void WriteBoard( Board _board , int _line , int _columm ) {
+
+         if ( _board.Pieces( _line , _columm ) != null )
+            Console.Write( _board.Pieces( _line , _columm ) + " " );
+         else
+            Console.Write( "- " );
       }
    }
 }

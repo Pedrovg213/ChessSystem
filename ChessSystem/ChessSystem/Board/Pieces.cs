@@ -3,7 +3,7 @@ namespace board {
    internal class Pieces {
 
       public Position position {
-         get; private set;
+         get; set;
       }
       public Color color {
          get; protected set;
@@ -16,11 +16,11 @@ namespace board {
       }
 
 
-      public Pieces( Board _board , Position _position , Color _color ) {
-      
+      public Pieces( Board _board , Color _color ) {
+
          board = _board;
-         position = _position;
          color = _color;
+         position = null;
          QuantMoviment = 0;
       }
    }
