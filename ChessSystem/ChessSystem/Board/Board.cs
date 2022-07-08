@@ -1,4 +1,5 @@
 ﻿using System;
+using Chess;
 
 namespace board {
    internal class Board {
@@ -34,12 +35,31 @@ namespace board {
 
          return pieces[ _position.Line , _position.Columm ];
       }
+      public Pieces RemovePiece( Position _position ) {
+
+         if ( GetPiece( _position ) == null )
+            return null;
+
+         Pieces aux = GetPiece(_position);
+         aux.position = null;
+         SetPiece( null , _position );
+
+         return aux;
+      }
       public void PutPieces( Pieces _piece , Position _position ) {
 
          if ( HasPiece( _position ) )
             throw new BoardException( "This position already has a piece." );
-         pieces[ _position.Line , _position.Columm ] = _piece;
+         SetPiece( _piece , _position );
          _piece.position = _position;
+      }
+      public void PutPieces( Pieces _piece , char _columm , int _line ) {
+
+         PutPieces( _piece, new ChessPosition(_columm, _line).ToPosition() );
+      }
+      public void SetPiece( Pieces _piece , Position _position ) {
+
+         pieces[ _position.Line , _position.Columm ] = _piece;
       }
       public void ValidatePosition( Position _position ) {
 

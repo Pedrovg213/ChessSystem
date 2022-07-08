@@ -6,7 +6,7 @@ namespace board {
          get; set;
       }
       public Color color {
-         get; protected set;
+         get; set;
       }
       public int QuantMoviment {
          get; set;
@@ -22,6 +22,12 @@ namespace board {
          color = _color;
          position = null;
          QuantMoviment = 0;
+      }
+
+
+      public void IncremetMoviment( ) {
+
+         QuantMoviment++;
       }
    }
 }

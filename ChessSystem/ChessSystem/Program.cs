@@ -7,13 +7,24 @@ namespace ChessSystem {
       static void Main( string[ ] args ) {
 
          try {
-            Board board = new Board(8, 8);
 
-            board.PutPieces( new Castle( board , Color.Black ) , new Position( 0 , 0 ) );
-            board.PutPieces( new Castle( board , Color.Black ) , new Position( 1 , 3 ) );
-            board.PutPieces( new King( board , Color.White ) , new Position( 5 , 0 ) );
+            Playing play = new Playing();
 
-            Screen.PrintBoard( board );
+            while ( !play.Finished ) {
+
+               Console.Clear();
+
+               Screen.PrintBoard( play.board );
+
+               Console.WriteLine();
+               Console.Write( "From: " );
+               Position from = Screen.ReadChessPosition();
+               Console.Write( "To: " );
+               Position to = Screen.ReadChessPosition();
+
+               play.MovingPiece( from , to );
+            }
+
          } catch ( BoardException be ) {
             Console.WriteLine( be.Message );
          }

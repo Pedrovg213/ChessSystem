@@ -11,7 +11,7 @@ namespace Chess {
       }
 
 
-      public ChessPosition( int _line , char _columm ) {
+      public ChessPosition( char _columm , int _line ) {
 
          Columm = _columm;
          Line = _line;
