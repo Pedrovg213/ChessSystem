@@ -17,8 +17,8 @@ namespace ChessSystem {
       }
       static void WriteBoard( Board _board , int _line , int _columm ) {
 
-         if ( _board.Pieces( _line , _columm ) != null )
-            Console.Write( _board.Pieces( _line , _columm ) + " " );
+         if ( _board.GetPiece( _line , _columm ) != null )
+            Console.Write( _board.GetPiece( _line , _columm ) + " " );
          else
             Console.Write( "- " );
       }
