@@ -1,12 +1,12 @@
 ﻿
 namespace board {
-   internal class Pieces {
+   abstract internal class Pieces {
 
       public Position position {
          get; set;
       }
       public Color color {
-         get; set;
+         get; protected set;
       }
       public int QuantMoviment {
          get; set;
@@ -24,7 +24,13 @@ namespace board {
          QuantMoviment = 0;
       }
 
+      protected bool CanMove( Position _position ) {
 
+         Pieces piece = board.GetPiece(_position);
+
+         return ( piece == null || piece.color != color );
+      }
+      public abstract bool[ , ] PossibleMoves( );
       public void IncremetMoviment( ) {
 
          QuantMoviment++;

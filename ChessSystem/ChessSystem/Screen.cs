@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using board;
 using Chess;
 
@@ -20,13 +21,13 @@ namespace ChessSystem {
 
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write( _piece + " ");
+            Console.Write( _piece + " " );
             Console.ForegroundColor = aux;
          }
       }
       public static Position ReadChessPosition( ) {
 
-         string cPos = Console.ReadLine();
+         string cPos = Console.ReadLine().ToUpper();
 
          char columm = cPos[0];
          int line = int.Parse(cPos[1] + "");
@@ -45,6 +46,30 @@ namespace ChessSystem {
             }
 
             Console.WriteLine();
+         }
+
+         Console.WriteLine( "  A B C D E F G H" );
+      }
+      public static void PrintBoard( Board _board , bool[ , ] _positions ) {
+
+         ConsoleColor originBackGround = Console.BackgroundColor;
+         ConsoleColor markBackGround = ConsoleColor.DarkGray;
+
+         for ( int i = 0; i < _board.Lines; i++ ) {
+
+            Console.Write( 8 - i + " " );
+
+            for ( int j = 0; j < _board.Columns; j++ ) {
+
+               Console.BackgroundColor =
+                  _positions[ i , j ] ? markBackGround : originBackGround;
+
+               WriteBoard( _board , i , j );
+               Console.BackgroundColor = originBackGround;
+            }
+
+            Console.WriteLine();
+            Console.BackgroundColor = originBackGround;
          }
 
          Console.WriteLine( "  A B C D E F G H" );
