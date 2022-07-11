@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
 using board;
 using Chess;
 
@@ -73,6 +73,53 @@ namespace ChessSystem {
          }
 
          Console.WriteLine( "  A B C D E F G H" );
+      }
+      private static void PrintCapturedPieces( Playing _play ) {
+
+         Console.WriteLine( "Captured Pieces:" );
+         Console.Write( "White: " );
+         PrintColor( _play.GetCapturedPieces( Color.White ) );
+         Console.Write( "Black: " );
+         Console.ForegroundColor = ConsoleColor.Yellow;
+         PrintColor( _play.GetCapturedPieces( Color.Black ) );
+         Console.ForegroundColor = ConsoleColor.Gray;
+      }
+      private static void PrintColor( HashSet<Pieces> _pieces ) {
+
+         Console.Write( "[ " );
+         foreach ( Pieces p in _pieces )
+            Console.Write( p + " " );
+         Console.WriteLine( "]" );
+      }
+      public static void PrintPlay( Playing _play ) {
+
+         PrintBoard( _play.board );
+         Console.WriteLine();
+         PrintCapturedPieces( _play );
+         Console.WriteLine();
+         Console.WriteLine( "Turn: " + _play.Turn );
+         Console.WriteLine( "Waiting for player: " );
+         if ( _play.Player == Color.Black ) {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+         }
+         Console.WriteLine( _play.Player.ToString().ToUpper() );
+         Console.ForegroundColor = ConsoleColor.Gray;
+
+      }
+      public static void PrintPlay( Playing _play , bool[ , ] _positions) {
+
+         PrintBoard( _play.board, _positions );
+         Console.WriteLine();
+         PrintCapturedPieces( _play );
+         Console.WriteLine();
+         Console.WriteLine( "Turn: " + _play.Turn );
+         Console.WriteLine( "Waiting for player: " );
+         if ( _play.Player == Color.Black ) {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+         }
+         Console.WriteLine( _play.Player.ToString().ToUpper() );
+         Console.ForegroundColor = ConsoleColor.Gray;
+
       }
    }
 }

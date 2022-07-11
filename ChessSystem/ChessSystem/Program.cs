@@ -23,15 +23,7 @@ namespace ChessSystem {
 
                try {
                   Console.Clear();
-                  Screen.PrintBoard( play.board );
-                  Console.WriteLine();
-                  Console.WriteLine( "Turn: " + play.Turn );
-                  Console.Write( "Waiting for play: " );
-                  if ( play.Player == Color.Black ) {
-                     Console.ForegroundColor = ConsoleColor.Yellow;
-                  }
-                  Console.WriteLine( play.Player );
-                  Console.ForegroundColor = ConsoleColor.Gray;
+                  Screen.PrintPlay( play );
 
                   Console.WriteLine();
                   Console.Write( "From: " );
@@ -41,15 +33,8 @@ namespace ChessSystem {
                   bool[,] possiblePositions = play.board.GetPiece(from).PossibleMoves();
 
                   Console.Clear();
-                  Screen.PrintBoard( play.board , possiblePositions );
-                  Console.WriteLine();
-                  Console.WriteLine( "Turn: " + play.Turn );
-                  Console.Write( "Waiting for play: " );
-                  if ( play.Player == Color.Black ) {
-                     Console.ForegroundColor = ConsoleColor.Yellow;
-                  }
-                  Console.WriteLine( play.Player );
-                  Console.ForegroundColor = ConsoleColor.Gray;
+                  //Screen.PrintPlay( play );
+                  Screen.PrintPlay( play , possiblePositions );
 
                   Console.WriteLine();
                   Console.Write( "To: " );
