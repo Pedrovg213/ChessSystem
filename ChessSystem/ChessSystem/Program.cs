@@ -21,22 +21,48 @@ namespace ChessSystem {
 
             while ( !play.Finished ) {
 
-               Console.Clear();
-               Screen.PrintBoard( play.board );
+               try {
+                  Console.Clear();
+                  Screen.PrintBoard( play.board );
+                  Console.WriteLine();
+                  Console.WriteLine( "Turn: " + play.Turn );
+                  Console.Write( "Waiting for play: " );
+                  if ( play.Player == Color.Black ) {
+                     Console.ForegroundColor = ConsoleColor.Yellow;
+                  }
+                  Console.WriteLine( play.Player );
+                  Console.ForegroundColor = ConsoleColor.Gray;
 
-               Console.WriteLine();
-               Console.Write( "From: " );
-               Position from = Screen.ReadChessPosition();
+                  Console.WriteLine();
+                  Console.Write( "From: " );
+                  Position from = Screen.ReadChessPosition();
+                  play.ValidationOriginPosition( from );
 
-               bool[,] possiblePositions = play.board.GetPiece(from).PossibleMoves();
+                  bool[,] possiblePositions = play.board.GetPiece(from).PossibleMoves();
 
-               Console.Clear();
-               Screen.PrintBoard( play.board , possiblePositions );
+                  Console.Clear();
+                  Screen.PrintBoard( play.board , possiblePositions );
+                  Console.WriteLine();
+                  Console.WriteLine( "Turn: " + play.Turn );
+                  Console.Write( "Waiting for play: " );
+                  if ( play.Player == Color.Black ) {
+                     Console.ForegroundColor = ConsoleColor.Yellow;
+                  }
+                  Console.WriteLine( play.Player );
+                  Console.ForegroundColor = ConsoleColor.Gray;
 
-               Console.Write( "To: " );
-               Position to = Screen.ReadChessPosition();
+                  Console.WriteLine();
+                  Console.Write( "To: " );
+                  Position to = Screen.ReadChessPosition();
+                  play.ValidationTargetPosition( from , to );
 
-               play.MovingPiece( from , to );
+                  play.MovingPiece( from , to );
+
+               } catch ( BoardException be ) {
+                  Console.WriteLine( be.Message );
+                  Console.WriteLine( "Press enter." );
+                  Console.ReadLine();
+               }
             }
 
          } catch ( BoardException be ) {
