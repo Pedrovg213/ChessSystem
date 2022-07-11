@@ -12,6 +12,9 @@ namespace Chess {
       public bool Finished {
          get; private set;
       } = false;
+      public bool Xeque {
+         get; private set;
+      }
       public int Turn {
          get; private set;
       }
@@ -27,11 +30,54 @@ namespace Chess {
          Player = Color.White;
          PiecesInGame = new HashSet<Pieces>();
          CapturedPieces = new HashSet<Pieces>();
+         Xeque = false;
 
          PutPieces();
       }
 
 
+      private Color Adversary( Color _checker ) {
+
+         return ( _checker == Color.White ?
+            Color.Black : Color.White );
+      }
+      private Pieces GetKing( Color _color ) {
+
+         foreach ( Pieces p in GetInGamePieces( _color ) )
+            if ( p is King )
+               return p;
+
+         return null;
+      }
+
+      private void ChangePlayer( ) {
+
+         if ( Player == Color.White )
+            Player = Color.Black;
+         else {
+            Player = Color.White;
+            Turn++;
+         }
+      }
+      private void PutNewPiece( Pieces _piece , char _columm , int _line ) {
+
+         board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
+         PiecesInGame.Add( _piece );
+      }
+      public bool IsCheck( Color _color ) {
+
+         Pieces king = GetKing(_color);
+         if ( king == null )
+            throw new BoardException( $"Have no king {_color} on the board." );
+
+         foreach ( Pieces p in GetInGamePieces( Adversary( _color ) ) ) {
+
+            bool [,] mat = p.PossibleMoves();
+            if ( mat[ king.position.Line , king.position.Columm ] )
+               return true;
+         }
+         return false;
+      }
       public HashSet<Pieces> GetCapturedPieces( Color _color ) {
 
          HashSet<Pieces> retn = new HashSet<Pieces>();
@@ -54,30 +100,28 @@ namespace Chess {
 
          return retn;
       }
-      private void ChangePlayer( ) {
-
-         if ( Player == Color.White )
-            Player = Color.Black;
-         else {
-            Player = Color.White;
-            Turn++;
-         }
-      }
-      private void PutNewPiece( Pieces _piece , char _columm , int _line ) {
-
-         board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
-         PiecesInGame.Add( _piece );
-      }
-      public void MovingPiece( Position _from , Position _to ) {
+      public Pieces RunMovement( Position _from , Position _to ) {
 
          Pieces piece = board.RemovePiece(_from);
          piece.IncremetMoviment();
-         
          Pieces capturedPiece = board.RemovePiece( _to );
          if ( capturedPiece != null )
             CapturedPieces.Add( capturedPiece );
-
          board.PutPieces( piece , _to );
+
+         return capturedPiece;
+      }
+      public void MovingPiece( Position _from , Position _to ) {
+
+         Pieces capturedPiece = RunMovement( _from , _to );
+
+         if ( IsCheck( Player ) ) {
+
+            UndoMovement( _from , _to , capturedPiece );
+            throw new BoardException( "!!!YOU WILL BE IN CHECK!!!" );
+         }
+
+         Xeque = IsCheck( Adversary( Player ) );
 
          ChangePlayer();
       }
@@ -100,6 +144,15 @@ namespace Chess {
          PutNewPiece( new Castle( board , color ) , 'C' , 7 );
          PutNewPiece( new Castle( board , color ) , 'D' , 7 );
          PutNewPiece( new Castle( board , color ) , 'E' , 7 );
+      }
+      public void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
+
+         Pieces piece = board.RemovePiece(_to);
+         if ( _capturedPiece != null ) {
+            board.PutPieces( _capturedPiece , _to );
+            CapturedPieces.Remove( _capturedPiece );
+         }
+         board.PutPieces( piece , _from );
       }
       public void ValidationTargetPosition( Position _from , Position _to ) {
 

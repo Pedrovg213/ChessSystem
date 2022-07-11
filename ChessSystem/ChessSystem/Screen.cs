@@ -103,12 +103,16 @@ namespace ChessSystem {
             Console.ForegroundColor = ConsoleColor.Yellow;
          }
          Console.WriteLine( _play.Player.ToString().ToUpper() );
+         if ( _play.Xeque ) {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine( "!!!YOU ARE IN CHECK!!!" );
+         }
          Console.ForegroundColor = ConsoleColor.Gray;
 
       }
-      public static void PrintPlay( Playing _play , bool[ , ] _positions) {
+      public static void PrintPlay( Playing _play , bool[ , ] _positions ) {
 
-         PrintBoard( _play.board, _positions );
+         PrintBoard( _play.board , _positions );
          Console.WriteLine();
          PrintCapturedPieces( _play );
          Console.WriteLine();
@@ -118,6 +122,10 @@ namespace ChessSystem {
             Console.ForegroundColor = ConsoleColor.Yellow;
          }
          Console.WriteLine( _play.Player.ToString().ToUpper() );
+         if ( _play.Xeque ) {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine( "!!!YOU ARE IN CHECK!!!" );
+         }
          Console.ForegroundColor = ConsoleColor.Gray;
 
       }
