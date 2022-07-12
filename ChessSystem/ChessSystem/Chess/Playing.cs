@@ -63,7 +63,7 @@ namespace Chess {
          board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
          PiecesInGame.Add( _piece );
       }
-      
+
       public bool CheckMateTest( Color _color ) {
 
          if ( !IsCheck( _color ) )
@@ -159,14 +159,42 @@ namespace Chess {
 
          // White pieces
          Color color = Color.White;
-         PutNewPiece( new Castle( board , color ) , 'C' , 1 );
-         PutNewPiece( new King( board , color ) , 'D' , 1 );
-         PutNewPiece( new Castle( board , color ) , 'H' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'A' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'B' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'C' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'D' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'E' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'F' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'G' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'H' , 2 );
+         PutNewPiece( new Castle( board , color ) , 'A' , 1 );
+         PutNewPiece( new Horse( board , color ) , 'B' , 1 );
+         PutNewPiece( new Bishop( board , color ) , 'C' , 1 );
+         PutNewPiece( new Queen( board , color ) , 'D' , 1 );
+         PutNewPiece( new King( board , color ) , 'E' , 1 );
+         PutNewPiece( new Bishop( board , color ) , 'F' , 1 );
+         PutNewPiece( new Horse( board , color ) , 'G' , 1 );
+         PutNewPiece( new Castle( board , color ) , 'H' , 1 );
+
 
          // Black pieces
          color = Color.Black;
-         PutNewPiece( new Castle( board , color ) , 'B' , 8 );
-         PutNewPiece( new King( board , color ) , 'A' , 8 );
+         PutNewPiece( new Pawn( board , color ) , 'A' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'B' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'C' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'D' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'E' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'F' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'G' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'H' , 7 );
+         PutNewPiece( new Castle( board , color ) , 'A' , 8 );
+         PutNewPiece( new Horse( board , color ) , 'B' , 8 );
+         PutNewPiece( new Bishop( board , color ) , 'C' , 8 );
+         PutNewPiece( new Queen( board , color ) , 'D' , 8 );
+         PutNewPiece( new King( board , color ) , 'E' , 8 );
+         PutNewPiece( new Bishop( board , color ) , 'F' , 8 );
+         PutNewPiece( new Horse( board , color ) , 'G' , 8 );
+         PutNewPiece( new Castle( board , color ) , 'H' , 8 );
       }
       public void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
 

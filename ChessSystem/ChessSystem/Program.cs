@@ -7,11 +7,11 @@ namespace ChessSystem {
       static void Main( string[ ] args ) {
 
          /* 
-          * king rei.               K - R
-          * queen rainha.           Q - D
-          * bishop bispo.           B - B
-          * knight or horse cavalo. H - C
-          * rook (or castle) torre. C - T
+          * king rei.               K - R - OK
+          * queen rainha.           Q - D - OK
+          * bishop bispo.           B - B - OK
+          * knight or horse cavalo. H - C - OK
+          * rook (or castle) torre. C - T - OK
           * pawn peão.              P - P
           */
 

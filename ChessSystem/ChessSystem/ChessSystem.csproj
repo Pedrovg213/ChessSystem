@@ -48,10 +48,14 @@
     <Compile Include="Board\Color.cs" />
     <Compile Include="Board\Pieces.cs" />
     <Compile Include="Board\Position.cs" />
+    <Compile Include="Chess\Bishop.cs" />
     <Compile Include="Chess\Castle.cs" />
     <Compile Include="Chess\ChessPosition.cs" />
+    <Compile Include="Chess\Horse.cs" />
     <Compile Include="Chess\King.cs" />
+    <Compile Include="Chess\Pawn.cs" />
     <Compile Include="Chess\Playing.cs" />
+    <Compile Include="Chess\Queen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screen.cs" />
