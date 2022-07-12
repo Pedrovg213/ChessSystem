@@ -50,6 +50,9 @@ namespace ChessSystem {
                }
             }
 
+            Console.Clear();
+            Screen.PrintPlay( play );
+
          } catch ( BoardException be ) {
             Console.WriteLine( be.Message );
          }

@@ -49,7 +49,6 @@ namespace Chess {
 
          return null;
       }
-
       private void ChangePlayer( ) {
 
          if ( Player == Color.White )
@@ -63,6 +62,34 @@ namespace Chess {
 
          board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
          PiecesInGame.Add( _piece );
+      }
+      
+      public bool CheckMateTest( Color _color ) {
+
+         if ( !IsCheck( _color ) )
+            return false;
+
+         foreach ( Pieces p in GetInGamePieces( _color ) ) {
+
+            bool[,] mat = p.PossibleMoves();
+            for ( int i = 0; i < board.Lines; i++ ) {
+               for ( int j = 0; j < board.Columns; j++ ) {
+                  if ( mat[ i , j ] ) {
+
+                     Position piecePosition = p.position;
+                     Position matPosition = new Position( i , j );
+                     Pieces capturedPiece = RunMovement(piecePosition, matPosition);
+                     bool isInCheck = IsCheck(_color);
+                     UndoMovement( piecePosition , matPosition , capturedPiece );
+
+                     if ( !isInCheck )
+                        return false;
+                  }
+               }
+            }
+         }
+
+         return true;
       }
       public bool IsCheck( Color _color ) {
 
@@ -123,7 +150,10 @@ namespace Chess {
 
          Xeque = IsCheck( Adversary( Player ) );
 
-         ChangePlayer();
+         if ( CheckMateTest( Adversary( Player ) ) )
+            Finished = true;
+         else
+            ChangePlayer();
       }
       public void PutPieces( ) {
 
@@ -131,19 +161,12 @@ namespace Chess {
          Color color = Color.White;
          PutNewPiece( new Castle( board , color ) , 'C' , 1 );
          PutNewPiece( new King( board , color ) , 'D' , 1 );
-         PutNewPiece( new Castle( board , color ) , 'E' , 1 );
-         PutNewPiece( new Castle( board , color ) , 'C' , 2 );
-         PutNewPiece( new Castle( board , color ) , 'D' , 2 );
-         PutNewPiece( new Castle( board , color ) , 'E' , 2 );
+         PutNewPiece( new Castle( board , color ) , 'H' , 7 );
 
          // Black pieces
          color = Color.Black;
-         PutNewPiece( new Castle( board , color ) , 'C' , 8 );
-         PutNewPiece( new King( board , color ) , 'D' , 8 );
-         PutNewPiece( new Castle( board , color ) , 'E' , 8 );
-         PutNewPiece( new Castle( board , color ) , 'C' , 7 );
-         PutNewPiece( new Castle( board , color ) , 'D' , 7 );
-         PutNewPiece( new Castle( board , color ) , 'E' , 7 );
+         PutNewPiece( new Castle( board , color ) , 'B' , 8 );
+         PutNewPiece( new King( board , color ) , 'A' , 8 );
       }
       public void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
 

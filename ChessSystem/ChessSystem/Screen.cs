@@ -97,17 +97,25 @@ namespace ChessSystem {
          Console.WriteLine();
          PrintCapturedPieces( _play );
          Console.WriteLine();
-         Console.WriteLine( "Turn: " + _play.Turn );
-         Console.WriteLine( "Waiting for player: " );
-         if ( _play.Player == Color.Black ) {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+         if ( !_play.Finished ) {
+
+            Console.WriteLine( "Turn: " + _play.Turn );
+            Console.WriteLine( "Waiting for player: " );
+            if ( _play.Player == Color.Black ) {
+               Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+            Console.WriteLine( _play.Player.ToString().ToUpper() );
+            if ( _play.Xeque ) {
+               Console.ForegroundColor = ConsoleColor.Red;
+               Console.WriteLine( "!!!YOU ARE IN CHECK!!!" );
+            }
+            Console.ForegroundColor = ConsoleColor.Gray;
+         } else {
+            Console.WriteLine( "!!!XEQUEMATE!!!" );
+            if ( _play.Player == Color.Black )
+               Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine( "Vencedor: " + _play.Player );
          }
-         Console.WriteLine( _play.Player.ToString().ToUpper() );
-         if ( _play.Xeque ) {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine( "!!!YOU ARE IN CHECK!!!" );
-         }
-         Console.ForegroundColor = ConsoleColor.Gray;
 
       }
       public static void PrintPlay( Playing _play , bool[ , ] _positions ) {
