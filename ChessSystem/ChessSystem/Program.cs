@@ -44,7 +44,14 @@ namespace ChessSystem {
                   play.MovingPiece( from , to );
 
                } catch ( BoardException be ) {
+                  
                   Console.WriteLine( be.Message );
+                  Console.WriteLine( "Press enter." );
+                  Console.ReadLine();
+
+               } catch (Exception e ) {
+                  
+                  Console.WriteLine( e.Message );
                   Console.WriteLine( "Press enter." );
                   Console.ReadLine();
                }

@@ -63,7 +63,7 @@ namespace Chess {
          board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
          PiecesInGame.Add( _piece );
       }
-      
+
       public bool CheckMateTest( Color _color ) {
 
          if ( !IsCheck( _color ) )
@@ -130,14 +130,44 @@ namespace Chess {
       public Pieces RunMovement( Position _from , Position _to ) {
 
          Pieces piece = board.RemovePiece(_from);
-         piece.IncremetMoviment();
          Pieces capturedPiece = board.RemovePiece( _to );
+
          if ( capturedPiece != null )
             CapturedPieces.Add( capturedPiece );
+
          board.PutPieces( piece , _to );
+
+         LittleRoque( _from , _to , piece );
+         BigRoque( _from , _to , piece );
+
+         piece.IncremetMoviment();
 
          return capturedPiece;
       }
+
+      private void LittleRoque( Position _from , Position _to , Pieces _piece ) {
+
+         if ( _piece is King && _from.Columm + 2 == _to.Columm ) {
+
+            Position fromCastle = new Position(_from.Line, _from.Columm + 3);
+            Position toCastle = new Position(_from.Line, _from.Columm + 1);
+
+            if ( board.GetPiece( fromCastle ) is Castle )
+               RunMovement( fromCastle , toCastle );
+         }
+      }
+      private void BigRoque( Position _from , Position _to , Pieces _piece ) {
+
+         if ( _piece is King && _from.Columm - 2 == _to.Columm ) {
+
+            Position fromCastle = new Position(_from.Line, _from.Columm - 4 );
+            Position toCastle = new Position(_from.Line, _from.Columm - 1);
+
+            if ( board.GetPiece( fromCastle ) is Castle )
+               RunMovement( fromCastle , toCastle );
+         }
+      }
+
       public void MovingPiece( Position _from , Position _to ) {
 
          Pieces capturedPiece = RunMovement( _from , _to );
@@ -163,11 +193,18 @@ namespace Chess {
          PutNewPiece( new Horse( board , color ) , 'B' , 1 );
          PutNewPiece( new Bishop( board , color ) , 'C' , 1 );
          PutNewPiece( new Queen( board , color ) , 'D' , 1 );
-         PutNewPiece( new King( board , color ) , 'E' , 1 );
+         PutNewPiece( new King( this , board , color ) , 'E' , 1 );
          PutNewPiece( new Bishop( board , color ) , 'F' , 1 );
          PutNewPiece( new Horse( board , color ) , 'G' , 1 );
          PutNewPiece( new Castle( board , color ) , 'H' , 1 );
+         PutNewPiece( new Pawn( board , color ) , 'A' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'B' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'C' , 2 );
          PutNewPiece( new Pawn( board , color ) , 'D' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'E' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'F' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'G' , 2 );
+         PutNewPiece( new Pawn( board , color ) , 'H' , 2 );
 
          // Black pieces
          color = Color.Black;
@@ -175,10 +212,18 @@ namespace Chess {
          PutNewPiece( new Horse( board , color ) , 'B' , 8 );
          PutNewPiece( new Bishop( board , color ) , 'C' , 8 );
          PutNewPiece( new Queen( board , color ) , 'D' , 8 );
-         PutNewPiece( new King( board , color ) , 'E' , 8 );
+         PutNewPiece( new King( this , board , color ) , 'E' , 8 );
          PutNewPiece( new Bishop( board , color ) , 'F' , 8 );
          PutNewPiece( new Horse( board , color ) , 'G' , 8 );
          PutNewPiece( new Castle( board , color ) , 'H' , 8 );
+         PutNewPiece( new Pawn( board , color ) , 'A' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'B' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'C' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'D' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'E' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'F' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'G' , 7 );
+         PutNewPiece( new Pawn( board , color ) , 'H' , 7 );
       }
       public void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
 
@@ -188,6 +233,25 @@ namespace Chess {
             CapturedPieces.Remove( _capturedPiece );
          }
          board.PutPieces( piece , _from );
+
+         if ( piece is King && _from.Columm + 2 == _to.Columm ) {
+
+            Position fromCastle = new Position(_from.Line, _from.Columm + 3);
+            Position toCastle = new Position(_from.Line, _from.Columm + 1);
+
+            Pieces castle = board.RemovePiece(toCastle);
+            castle.DecrementMovemente();
+            board.PutPieces( castle , fromCastle );
+         }
+         if ( piece is King && _from.Columm - 2 == _to.Columm ) {
+
+            Position fromCastle = new Position(_from.Line, _from.Columm - 4);
+            Position toCastle = new Position(_from.Line, _from.Columm - 1);
+
+            Pieces castle = board.RemovePiece(toCastle);
+            castle.DecrementMovemente();
+            board.PutPieces( castle , fromCastle );
+         }
       }
       public void ValidationTargetPosition( Position _from , Position _to ) {
 

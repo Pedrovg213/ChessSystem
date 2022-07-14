@@ -48,5 +48,9 @@ namespace board {
 
          QuantMoviment++;
       }
+      public void DecrementMovemente( ) {
+
+         QuantMoviment--;
+      }
    }
 }
