@@ -7,51 +7,46 @@ namespace Chess {
          base( _board , _color ) {
       }
 
+
       public override bool[ , ] PossibleMoves( ) {
 
-         bool[,] mat = new bool[board.Lines, board.Columns];
+         bool[,] moves = new bool[board.Lines, board.Columns];
+         Position checkPosition = new Position(0, 0);
 
-         // Up-up-right
-         Position position = new Position(this.position.Line+2, this.position.Columm+1);
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
+         // up-up-right
+         checkPosition.SetPosition( position.Line + 2 , position.Columm + 1 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // up-right-right
+         checkPosition.SetPosition( position.Line + 1 , position.Columm + 2 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // up-up-left
+         checkPosition.SetPosition( position.Line + 2 , position.Columm - 1 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // up-left-left
+         checkPosition.SetPosition( position.Line + 1 , position.Columm + 2 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // down-down-right
+         checkPosition.SetPosition( position.Line - 2 , position.Columm + 1 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // down-right,right
+         checkPosition.SetPosition( position.Line + 1 , position.Columm + 2 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // down-down-left
+         checkPosition.SetPosition( position.Line - 2 , position.Columm - 1 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         // down-left-left
+         checkPosition.SetPosition( position.Line - 1 , position.Columm - 2 );
+         if ( board.ValidatePosition( checkPosition ) )
+            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
 
-         // Up-right-right
-         position.SetPosition( this.position.Line+1 , this.position.Columm+2 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         // Down-right-right
-         position.SetPosition( this.position.Line - 1 , this.position.Columm + 2 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         // Down-down-right
-         position.SetPosition( this.position.Line -2 , this.position.Columm + 1 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         // Down-down-left
-         position.SetPosition( this.position.Line -2 , this.position.Columm - 1 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         // Down-left-left
-         position.SetPosition( this.position.Line - 1 , this.position.Columm - 2 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         // Up-left-left
-         position.SetPosition( this.position.Line + 1 , this.position.Columm - 2 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         // Up-up-left
-         position.SetPosition( this.position.Line +2 , this.position.Columm -1 );
-         if ( board.ValidatePosition( position ) && CanMove( position ) )
-            mat[ position.Line , position.Columm ] = true;
-
-         return mat;
+         return ( moves );
       }
       public override string ToString( ) {
          return "H";

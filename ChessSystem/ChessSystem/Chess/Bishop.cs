@@ -9,63 +9,60 @@ namespace Chess {
 
 
       public override bool[ , ] PossibleMoves( ) {
+         
+         bool[,] moves = new bool[board.Lines, board.Columns];
+         Position checkPosition = new Position(0, 0);
 
-         bool[,] mat = new bool[board.Lines, board.Columns];
+         // up-right
+         checkPosition.SetPosition( position.Line + 1 , position.Columm + 1 );
+         while ( board.ValidatePosition( checkPosition ) && CanMove( checkPosition ) ) {
+            moves[ checkPosition.Line , checkPosition.Columm ] = true;
 
-         // Up-right
-         Position position = new Position(this.position.Line+1, this.position.Columm+1);
-
-         while (board.ValidatePosition(position) && CanMove( position ) ) {
-            mat[ position.Line , position.Columm ] = true;
-
-            if ( board.GetPiece( position ) != null && board.GetPiece( position ).color != color )
+            if ( board.GetPiece( checkPosition ) != null && board.GetPiece( checkPosition ).color != color )
                break;
 
-            position.Line++;
-            position.Columm++;
+            checkPosition.Line++;
+            checkPosition.Columm++;
          }
-         // Down-right
-         position.SetPosition(this.position.Line-1, this.position.Columm+1);
+         // up-left
+         checkPosition.SetPosition( position.Line + 1 , position.Columm - 1 );
+         while ( board.ValidatePosition( checkPosition ) && CanMove( checkPosition ) ) {
+            moves[ checkPosition.Line , checkPosition.Columm ] = true;
 
-         while ( board.ValidatePosition( position ) && CanMove( position ) ) {
-            mat[ position.Line , position.Columm ] = true;
-
-            if ( board.GetPiece( position ) != null && board.GetPiece( position ).color != color )
+            if ( board.GetPiece( checkPosition ) != null && board.GetPiece( checkPosition ).color != color )
                break;
 
-            position.Line--;
-            position.Columm++;
+            checkPosition.Line++;
+            checkPosition.Columm--;
          }
-         // Down-left
-         position.SetPosition(this.position.Line-1, this.position.Columm-1);
+         // down-right         
+         checkPosition.SetPosition( position.Line - 1 , position.Columm + 1 );
+         while ( board.ValidatePosition( checkPosition ) && CanMove( checkPosition ) ) {
+            moves[ checkPosition.Line , checkPosition.Columm ] = true;
 
-         while ( board.ValidatePosition( position ) && CanMove( position ) ) {
-            mat[ position.Line , position.Columm ] = true;
-
-            if ( board.GetPiece( position ) != null && board.GetPiece( position ).color != color )
+            if ( board.GetPiece( checkPosition ) != null && board.GetPiece( checkPosition ).color != color )
                break;
 
-            position.Line--;
-            position.Columm--;
+            checkPosition.Line--;
+            checkPosition.Columm++;
          }
-         // Up-left
-         position.SetPosition(this.position.Line+1, this.position.Columm-1);
+         // down-left
+         checkPosition.SetPosition( position.Line - 1 , position.Columm - 1 );
+         while ( board.ValidatePosition( checkPosition ) && CanMove( checkPosition ) ) {
+            moves[ checkPosition.Line , checkPosition.Columm ] = true;
 
-         while ( board.ValidatePosition( position ) && CanMove( position ) ) {
-            mat[ position.Line , position.Columm ] = true;
-
-            if ( board.GetPiece( position ) != null && board.GetPiece( position ).color != color )
+            if ( board.GetPiece( checkPosition ) != null && board.GetPiece( checkPosition ).color != color )
                break;
 
-            position.Line++;
-            position.Columm--;
+            checkPosition.Line--;
+            checkPosition.Columm--;
          }
 
-         return mat;
+
+         return ( moves );
       }
-
-
       public override string ToString( ) {
+
          return "B";
       }
    }

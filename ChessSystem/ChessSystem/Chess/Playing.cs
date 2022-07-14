@@ -63,7 +63,7 @@ namespace Chess {
          board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
          PiecesInGame.Add( _piece );
       }
-
+      
       public bool CheckMateTest( Color _color ) {
 
          if ( !IsCheck( _color ) )
@@ -159,14 +159,6 @@ namespace Chess {
 
          // White pieces
          Color color = Color.White;
-         PutNewPiece( new Pawn( board , color ) , 'A' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'B' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'C' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'D' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'E' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'F' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'G' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'H' , 2 );
          PutNewPiece( new Castle( board , color ) , 'A' , 1 );
          PutNewPiece( new Horse( board , color ) , 'B' , 1 );
          PutNewPiece( new Bishop( board , color ) , 'C' , 1 );
@@ -175,18 +167,10 @@ namespace Chess {
          PutNewPiece( new Bishop( board , color ) , 'F' , 1 );
          PutNewPiece( new Horse( board , color ) , 'G' , 1 );
          PutNewPiece( new Castle( board , color ) , 'H' , 1 );
-
+         PutNewPiece( new Pawn( board , color ) , 'D' , 2 );
 
          // Black pieces
          color = Color.Black;
-         PutNewPiece( new Pawn( board , color ) , 'A' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'B' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'C' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'D' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'E' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'F' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'G' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'H' , 7 );
          PutNewPiece( new Castle( board , color ) , 'A' , 8 );
          PutNewPiece( new Horse( board , color ) , 'B' , 8 );
          PutNewPiece( new Bishop( board , color ) , 'C' , 8 );
