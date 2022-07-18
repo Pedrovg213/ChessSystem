@@ -45,13 +45,16 @@ namespace Chess {
          return ( _checker == Color.White ?
             Color.Black : Color.White );
       }
-      private Pieces GetKing( Color _color ) {
+      private void BigRoque( Position _from , Position _to , Pieces _piece ) {
 
-         foreach ( Pieces p in GetInGamePieces( _color ) )
-            if ( p is King )
-               return p;
+         if ( _piece is King && _from.Columm - 2 == _to.Columm ) {
 
-         return null;
+            Position fromCastle = new Position(_from.Line, _from.Columm - 4 );
+            Position toCastle = new Position(_from.Line, _from.Columm - 1);
+
+            if ( board.GetPiece( fromCastle ) is Castle )
+               RunMovement( fromCastle , toCastle );
+         }
       }
       private void ChangePlayer( ) {
 
@@ -62,18 +65,7 @@ namespace Chess {
             Turn++;
          }
       }
-      private void PutNewPiece( Pieces _piece , char _columm , int _line ) {
-
-         board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
-         PiecesInGame.Add( _piece );
-      }
-      private void PutNewPiece( Pieces _piece , Position _position ) {
-
-         board.PutPieces( _piece , _position );
-         PiecesInGame.Add( _piece );
-      }
-
-      public bool CheckMateTest( Color _color ) {
+      private bool CheckMateTest( Color _color ) {
 
          if ( !IsCheck( _color ) )
             return false;
@@ -100,7 +92,27 @@ namespace Chess {
 
          return true;
       }
-      public bool IsCheck( Color _color ) {
+      private Pieces GetKing( Color _color ) {
+
+         foreach ( Pieces p in GetInGamePieces( _color ) )
+            if ( p is King )
+               return p;
+
+         return null;
+      }
+      private HashSet<Pieces> GetInGamePieces( Color _color ) {
+
+         HashSet<Pieces> retn = new HashSet<Pieces>();
+
+         foreach ( Pieces p in PiecesInGame )
+            if ( p.color == _color )
+               retn.Add( p );
+
+         retn.ExceptWith( GetCapturedPieces( _color ) );
+
+         return retn;
+      }
+      private bool IsCheck( Color _color ) {
 
          Pieces king = GetKing(_color);
          if ( king == null )
@@ -114,59 +126,6 @@ namespace Chess {
          }
          return false;
       }
-      public HashSet<Pieces> GetCapturedPieces( Color _color ) {
-
-         HashSet<Pieces> retn = new HashSet<Pieces>();
-
-         foreach ( Pieces p in CapturedPieces )
-            if ( p.color == _color )
-               retn.Add( p );
-
-         return retn;
-      }
-      public HashSet<Pieces> GetInGamePieces( Color _color ) {
-
-         HashSet<Pieces> retn = new HashSet<Pieces>();
-
-         foreach ( Pieces p in PiecesInGame )
-            if ( p.color == _color )
-               retn.Add( p );
-
-         retn.ExceptWith( GetCapturedPieces( _color ) );
-
-         return retn;
-      }
-      public Pieces RunMovement( Position _from , Position _to ) {
-
-         Pieces piece = board.RemovePiece(_from);
-         Pieces capturedPiece = board.RemovePiece( _to );
-
-         if ( capturedPiece != null )
-            CapturedPieces.Add( capturedPiece );
-
-         board.PutPieces( piece , _to );
-
-         LittleRoque( _from , _to , piece );
-         BigRoque( _from , _to , piece );
-
-         if ( piece is Pawn ) {
-            if ( _from.Columm != _to.Columm && capturedPiece == null ) {
-
-               int id = piece.color == Color.White ? 1 : -1;
-               Position posPawn = new Position(_to.Line + id, _to.Columm);
-
-               capturedPiece = board.GetPiece( posPawn );
-               board.RemovePiece( posPawn );
-               CapturedPieces.Add( capturedPiece );
-            }
-         }
-
-         piece.IncremetMoviment();
-
-         return capturedPiece;
-      }
-
-
       private void LittleRoque( Position _from , Position _to , Pieces _piece ) {
 
          if ( _piece is King && _from.Columm + 2 == _to.Columm ) {
@@ -178,59 +137,17 @@ namespace Chess {
                RunMovement( fromCastle , toCastle );
          }
       }
-      private void BigRoque( Position _from , Position _to , Pieces _piece ) {
+      private void PutNewPiece( Pieces _piece , char _columm , int _line ) {
 
-         if ( _piece is King && _from.Columm - 2 == _to.Columm ) {
-
-            Position fromCastle = new Position(_from.Line, _from.Columm - 4 );
-            Position toCastle = new Position(_from.Line, _from.Columm - 1);
-
-            if ( board.GetPiece( fromCastle ) is Castle )
-               RunMovement( fromCastle , toCastle );
-         }
+         board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
+         PiecesInGame.Add( _piece );
       }
+      private void PutNewPiece( Pieces _piece , Position _position ) {
 
-      public void MovingPiece( Position _from , Position _to ) {
-
-         Pieces capturedPiece = RunMovement( _from , _to );
-
-         if ( IsCheck( Player ) ) {
-
-            UndoMovement( _from , _to , capturedPiece );
-            throw new BoardException( "!!!YOU WILL BE IN CHECK!!!" );
-         }
-
-         Pieces pieceTo = board.GetPiece(_to);
-
-         // Pawn promotion
-         if ( pieceTo is Pawn ) {
-
-            int promotionLine = pieceTo.color == Color.White ? 0 : 7;
-            if ( _to.Line == promotionLine ) {
-
-               pieceTo = board.RemovePiece( _to );
-               PiecesInGame.Remove( pieceTo );
-
-               Pieces queen = new Queen(board, pieceTo.color);
-               PutNewPiece( queen , _to );
-               PiecesInGame.Add( queen );
-            }
-         }
-
-         Xeque = IsCheck( Adversary( Player ) );
-
-         if ( CheckMateTest( Adversary( Player ) ) )
-            Finished = true;
-         else
-            ChangePlayer();
-
-         // En passant
-         if ( pieceTo is Pawn && ( _to.Line == _from.Line - 2 || _to.Line == _from.Line + 2 ) )
-            EnPassant = pieceTo;
-         else
-            EnPassant = null;
+         board.PutPieces( _piece , _position );
+         PiecesInGame.Add( _piece );
       }
-      public void PutPieces( ) {
+      private void PutPieces( ) {
 
          // White pieces
          Color color = Color.White;
@@ -270,7 +187,36 @@ namespace Chess {
          PutNewPiece( new Pawn( this , board , color ) , 'G' , 7 );
          PutNewPiece( new Pawn( this , board , color ) , 'H' , 7 );
       }
-      public void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
+      private Pieces RunMovement( Position _from , Position _to ) {
+
+         Pieces piece = board.RemovePiece(_from);
+         Pieces capturedPiece = board.RemovePiece( _to );
+
+         if ( capturedPiece != null )
+            CapturedPieces.Add( capturedPiece );
+
+         board.PutPieces( piece , _to );
+
+         LittleRoque( _from , _to , piece );
+         BigRoque( _from , _to , piece );
+
+         if ( piece is Pawn ) {
+            if ( _from.Columm != _to.Columm && capturedPiece == null ) {
+
+               int id = piece.color == Color.White ? 1 : -1;
+               Position posPawn = new Position(_to.Line + id, _to.Columm);
+
+               capturedPiece = board.GetPiece( posPawn );
+               board.RemovePiece( posPawn );
+               CapturedPieces.Add( capturedPiece );
+            }
+         }
+
+         piece.IncremetMoviment();
+
+         return capturedPiece;
+      }
+      private void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
 
          Pieces piece = board.RemovePiece(_to);
          if ( _capturedPiece != null ) {
@@ -297,6 +243,57 @@ namespace Chess {
             castle.DecrementMovemente();
             board.PutPieces( castle , fromCastle );
          }
+      }
+
+      public HashSet<Pieces> GetCapturedPieces( Color _color ) {
+
+         HashSet<Pieces> retn = new HashSet<Pieces>();
+
+         foreach ( Pieces p in CapturedPieces )
+            if ( p.color == _color )
+               retn.Add( p );
+
+         return retn;
+      }
+      public void MovingPiece( Position _from , Position _to ) {
+
+         Pieces capturedPiece = RunMovement( _from , _to );
+
+         if ( IsCheck( Player ) ) {
+
+            UndoMovement( _from , _to , capturedPiece );
+            throw new BoardException( "!!!YOU WILL BE IN CHECK!!!" );
+         }
+
+         Pieces pieceTo = board.GetPiece(_to);
+
+         // Pawn promotion
+         if ( pieceTo is Pawn ) {
+
+            int promotionLine = pieceTo.color == Color.White ? 0 : 7;
+            if ( _to.Line == promotionLine ) {
+
+               pieceTo = board.RemovePiece( _to );
+               PiecesInGame.Remove( pieceTo );
+
+               Pieces queen = new Queen(board, pieceTo.color);
+               PutNewPiece( queen , _to );
+               PiecesInGame.Add( queen );
+            }
+         }
+
+         Xeque = IsCheck( Adversary( Player ) );
+
+         if ( CheckMateTest( Adversary( Player ) ) )
+            Finished = true;
+         else
+            ChangePlayer();
+
+         // En passant
+         if ( pieceTo is Pawn && ( _to.Line == _from.Line - 2 || _to.Line == _from.Line + 2 ) )
+            EnPassant = pieceTo;
+         else
+            EnPassant = null;
       }
       public void ValidationTargetPosition( Position _from , Position _to ) {
 

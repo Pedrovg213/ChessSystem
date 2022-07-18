@@ -31,11 +31,15 @@ namespace board {
 
          return ( piece == null || piece.color != color );
       }
+      public abstract bool[ , ] PossibleMoves( );
       public bool CanMoveTo( Position _position ) {
 
          return PossibleMoves()[ _position.Line , _position.Columm ];
       }
-      public abstract bool[ , ] PossibleMoves( );
+      public void DecrementMovemente( ) {
+
+         QuantMoviment--;
+      }
       public bool HasPossibleMoves( ) {
 
          foreach ( bool isPossible in PossibleMoves() )
@@ -47,10 +51,6 @@ namespace board {
       public void IncremetMoviment( ) {
 
          QuantMoviment++;
-      }
-      public void DecrementMovemente( ) {
-
-         QuantMoviment--;
       }
    }
 }

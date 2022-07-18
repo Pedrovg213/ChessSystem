@@ -1,6 +1,7 @@
 ﻿
 namespace board {
    internal class Position {
+
       public int Line {
          get; set;
       }
@@ -14,6 +15,7 @@ namespace board {
          Line = _line;
          Columm = _columm;
       }
+
 
       public override string ToString( ) {
          

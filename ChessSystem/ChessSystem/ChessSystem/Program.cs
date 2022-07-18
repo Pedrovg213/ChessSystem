@@ -5,7 +5,7 @@ using Chess;
 namespace ChessSystem {
    internal class Program {
       static void Main( string[ ] args ) {
-         
+
          try {
 
             Playing play = new Playing();

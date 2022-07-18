@@ -5,6 +5,7 @@ namespace Chess {
 
       private Playing Play;
 
+
       public King( Playing _play , Board _board , Color _color ) :
          base( _board , _color ) {
 

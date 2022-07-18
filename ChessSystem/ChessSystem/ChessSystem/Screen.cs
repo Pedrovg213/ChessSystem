@@ -6,14 +6,34 @@ using Chess;
 namespace ChessSystem {
    internal class Screen {
 
-      static void WriteBoard( Board _board , int _line , int _columm ) {
+      private static void PrintCapturedPieces( Playing _play ) {
+
+         Console.WriteLine( "Captured Pieces:" );
+         Console.Write( "White: " );
+         PrintColor( _play.GetCapturedPieces( Color.White ) );
+
+         Console.Write( "Black: " );
+         Console.ForegroundColor = ConsoleColor.Yellow;
+         PrintColor( _play.GetCapturedPieces( Color.Black ) );
+         Console.ForegroundColor = ConsoleColor.Gray;
+      }
+      private static void PrintColor( HashSet<Pieces> _pieces ) {
+
+         Console.Write( "[ " );
+
+         foreach ( Pieces p in _pieces )
+            Console.Write( p + " " );
+
+         Console.WriteLine( "]" );
+      }
+      private static void WriteBoard( Board _board , int _line , int _columm ) {
 
          if ( _board.GetPiece( _line , _columm ) != null )
             WritePiece( _board.GetPiece( _line , _columm ) );
          else
             Console.Write( "- " );
       }
-      static void WritePiece( Pieces _piece ) {
+      private static void WritePiece( Pieces _piece ) {
 
          if ( _piece.color == Color.White )
             Console.Write( _piece + " " );
@@ -29,12 +49,18 @@ namespace ChessSystem {
 
          string cPos = Console.ReadLine().ToUpper();
 
+         if ( !char.IsLetter( cPos[ 0 ] ) || !char.IsNumber( cPos[ 1 ] ) || cPos.Length != 2 )
+            throw new BoardException( "Invalid Posiiton." );
+
          char columm = cPos[0];
          int line = int.Parse(cPos[1] + "");
+
 
          return new ChessPosition( columm , line ).ToPosition();
       }
       public static void PrintBoard( Board _board ) {
+
+         Console.WriteLine( "  A B C D E F G H" );
 
          for ( int i = 0; i < _board.Lines; i++ ) {
 
@@ -45,6 +71,8 @@ namespace ChessSystem {
                WriteBoard( _board , i , j );
             }
 
+            Console.Write( 8 - i );
+
             Console.WriteLine();
          }
 
@@ -54,6 +82,8 @@ namespace ChessSystem {
 
          ConsoleColor originBackGround = Console.BackgroundColor;
          ConsoleColor markBackGround = ConsoleColor.DarkGray;
+
+         Console.WriteLine( "  A B C D E F G H" );
 
          for ( int i = 0; i < _board.Lines; i++ ) {
 
@@ -68,28 +98,13 @@ namespace ChessSystem {
                Console.BackgroundColor = originBackGround;
             }
 
+            Console.Write( 8 - i + " " );
+
             Console.WriteLine();
             Console.BackgroundColor = originBackGround;
          }
 
          Console.WriteLine( "  A B C D E F G H" );
-      }
-      private static void PrintCapturedPieces( Playing _play ) {
-
-         Console.WriteLine( "Captured Pieces:" );
-         Console.Write( "White: " );
-         PrintColor( _play.GetCapturedPieces( Color.White ) );
-         Console.Write( "Black: " );
-         Console.ForegroundColor = ConsoleColor.Yellow;
-         PrintColor( _play.GetCapturedPieces( Color.Black ) );
-         Console.ForegroundColor = ConsoleColor.Gray;
-      }
-      private static void PrintColor( HashSet<Pieces> _pieces ) {
-
-         Console.Write( "[ " );
-         foreach ( Pieces p in _pieces )
-            Console.Write( p + " " );
-         Console.WriteLine( "]" );
       }
       public static void PrintPlay( Playing _play ) {
 
