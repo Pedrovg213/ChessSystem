@@ -6,6 +6,9 @@ namespace Chess {
 
       private HashSet<Pieces> PiecesInGame;
       private HashSet<Pieces> CapturedPieces;
+      public Pieces EnPassant {
+         get; private set;
+      }
       public Board board {
          get; private set;
       }
@@ -31,6 +34,7 @@ namespace Chess {
          PiecesInGame = new HashSet<Pieces>();
          CapturedPieces = new HashSet<Pieces>();
          Xeque = false;
+         EnPassant = null;
 
          PutPieces();
       }
@@ -61,6 +65,11 @@ namespace Chess {
       private void PutNewPiece( Pieces _piece , char _columm , int _line ) {
 
          board.PutPieces( _piece , new ChessPosition( _columm , _line ).ToPosition() );
+         PiecesInGame.Add( _piece );
+      }
+      private void PutNewPiece( Pieces _piece , Position _position ) {
+
+         board.PutPieces( _piece , _position );
          PiecesInGame.Add( _piece );
       }
 
@@ -140,10 +149,23 @@ namespace Chess {
          LittleRoque( _from , _to , piece );
          BigRoque( _from , _to , piece );
 
+         if ( piece is Pawn ) {
+            if ( _from.Columm != _to.Columm && capturedPiece == null ) {
+
+               int id = piece.color == Color.White ? 1 : -1;
+               Position posPawn = new Position(_to.Line + id, _to.Columm);
+
+               capturedPiece = board.GetPiece( posPawn );
+               board.RemovePiece( posPawn );
+               CapturedPieces.Add( capturedPiece );
+            }
+         }
+
          piece.IncremetMoviment();
 
          return capturedPiece;
       }
+
 
       private void LittleRoque( Position _from , Position _to , Pieces _piece ) {
 
@@ -178,12 +200,35 @@ namespace Chess {
             throw new BoardException( "!!!YOU WILL BE IN CHECK!!!" );
          }
 
+         Pieces pieceTo = board.GetPiece(_to);
+
+         // Pawn promotion
+         if ( pieceTo is Pawn ) {
+
+            int promotionLine = pieceTo.color == Color.White ? 0 : 7;
+            if ( _to.Line == promotionLine ) {
+
+               pieceTo = board.RemovePiece( _to );
+               PiecesInGame.Remove( pieceTo );
+
+               Pieces queen = new Queen(board, pieceTo.color);
+               PutNewPiece( queen , _to );
+               PiecesInGame.Add( queen );
+            }
+         }
+
          Xeque = IsCheck( Adversary( Player ) );
 
          if ( CheckMateTest( Adversary( Player ) ) )
             Finished = true;
          else
             ChangePlayer();
+
+         // En passant
+         if ( pieceTo is Pawn && ( _to.Line == _from.Line - 2 || _to.Line == _from.Line + 2 ) )
+            EnPassant = pieceTo;
+         else
+            EnPassant = null;
       }
       public void PutPieces( ) {
 
@@ -197,14 +242,14 @@ namespace Chess {
          PutNewPiece( new Bishop( board , color ) , 'F' , 1 );
          PutNewPiece( new Horse( board , color ) , 'G' , 1 );
          PutNewPiece( new Castle( board , color ) , 'H' , 1 );
-         PutNewPiece( new Pawn( board , color ) , 'A' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'B' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'C' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'D' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'E' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'F' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'G' , 2 );
-         PutNewPiece( new Pawn( board , color ) , 'H' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'A' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'B' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'C' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'D' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'E' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'F' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'G' , 2 );
+         PutNewPiece( new Pawn( this , board , color ) , 'H' , 2 );
 
          // Black pieces
          color = Color.Black;
@@ -216,14 +261,14 @@ namespace Chess {
          PutNewPiece( new Bishop( board , color ) , 'F' , 8 );
          PutNewPiece( new Horse( board , color ) , 'G' , 8 );
          PutNewPiece( new Castle( board , color ) , 'H' , 8 );
-         PutNewPiece( new Pawn( board , color ) , 'A' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'B' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'C' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'D' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'E' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'F' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'G' , 7 );
-         PutNewPiece( new Pawn( board , color ) , 'H' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'A' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'B' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'C' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'D' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'E' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'F' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'G' , 7 );
+         PutNewPiece( new Pawn( this , board , color ) , 'H' , 7 );
       }
       public void UndoMovement( Position _from , Position _to , Pieces _capturedPiece ) {
 

@@ -3,8 +3,13 @@
 namespace Chess {
    internal class Pawn : Pieces {
 
-      public Pawn( Board _board , Color _color ) :
+      private Playing Play;
+
+
+      public Pawn( Playing _play , Board _board , Color _color ) :
          base( _board , _color ) {
+
+         Play = _play;
       }
 
 
@@ -30,12 +35,30 @@ namespace Chess {
             moves[ checkPosition.Line , checkPosition.Columm ] = HasEnemy( checkPosition );
          // Up
          checkPosition.SetPosition( position.Line + id , position.Columm );
-         if ( !HasEnemy( checkPosition ) && board.ValidatePosition( checkPosition ) )
-            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         if ( board.ValidatePosition( checkPosition ) )
+            if ( !HasEnemy( checkPosition ) )
+               moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
          // first move
          checkPosition.SetPosition( position.Line + ( id * 2 ) , position.Columm );
-         if ( QuantMoviment == 0 && !HasEnemy( checkPosition ) && board.ValidatePosition( checkPosition ) )
-            moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+         if ( board.ValidatePosition( checkPosition ) )
+            if ( QuantMoviment == 0 && !HasEnemy( checkPosition ) )
+               moves[ checkPosition.Line , checkPosition.Columm ] = CanMove( checkPosition );
+
+         // En Passant
+         int passantLine = color == Color.Black ? 4 : 3;
+
+         if ( position.Line == passantLine ) {
+
+            Position left = new Position(position.Line, position.Columm -1);
+            if ( board.ValidatePosition( left ) )
+               if ( HasEnemy( left ) && board.GetPiece( left ) == Play.EnPassant )
+                  moves[ left.Line + id , left.Columm ] = true;
+
+            Position right = new Position(position.Line, position.Columm+1);
+            if ( board.ValidatePosition( right ) )
+               if ( HasEnemy( right ) && board.GetPiece( right ) == Play.EnPassant )
+                  moves[ right.Line + id , right.Columm ] = true;
+         }
 
          return ( moves );
       }

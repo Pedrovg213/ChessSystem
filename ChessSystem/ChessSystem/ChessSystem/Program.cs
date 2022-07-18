@@ -5,16 +5,7 @@ using Chess;
 namespace ChessSystem {
    internal class Program {
       static void Main( string[ ] args ) {
-
-         /* 
-          * king rei.               K - R - OK
-          * queen rainha.           Q - D - OK
-          * bishop bispo.           B - B - OK
-          * knight or horse cavalo. H - C - OK
-          * rook (or castle) torre. C - T - OK
-          * pawn peão.              P - P
-          */
-
+         
          try {
 
             Playing play = new Playing();
@@ -33,7 +24,6 @@ namespace ChessSystem {
                   bool[,] possiblePositions = play.board.GetPiece(from).PossibleMoves();
 
                   Console.Clear();
-                  //Screen.PrintPlay( play );
                   Screen.PrintPlay( play , possiblePositions );
 
                   Console.WriteLine();
@@ -44,16 +34,11 @@ namespace ChessSystem {
                   play.MovingPiece( from , to );
 
                } catch ( BoardException be ) {
-                  
+
                   Console.WriteLine( be.Message );
                   Console.WriteLine( "Press enter." );
                   Console.ReadLine();
 
-               } catch (Exception e ) {
-                  
-                  Console.WriteLine( e.Message );
-                  Console.WriteLine( "Press enter." );
-                  Console.ReadLine();
                }
             }
 
