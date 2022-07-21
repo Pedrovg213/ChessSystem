@@ -18,12 +18,14 @@ namespace Chess {
          position.SetPosition( this.position.Line - 1 , this.position.Columm );
 
          while ( board.ValidatePosition( position ) && CanMove( position ) ) {
+
             mat[ position.Line , position.Columm ] = true;
 
             if ( board.GetPiece( position ) != null && board.GetPiece( position ).color != color )
                break;
 
             position.Line--;
+
          }
 
          // down

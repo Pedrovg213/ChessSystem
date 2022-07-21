@@ -43,6 +43,7 @@ namespace ChessSystem {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write( _piece + " " );
             Console.ForegroundColor = aux;
+
          }
       }
       public static Position ReadChessPosition( ) {
@@ -55,8 +56,8 @@ namespace ChessSystem {
          char columm = cPos[0];
          int line = int.Parse(cPos[1] + "");
 
-
          return new ChessPosition( columm , line ).ToPosition();
+
       }
       public static void PrintBoard( Board _board ) {
 
@@ -77,6 +78,7 @@ namespace ChessSystem {
          }
 
          Console.WriteLine( "  A B C D E F G H" );
+
       }
       public static void PrintBoard( Board _board , bool[ , ] _positions ) {
 

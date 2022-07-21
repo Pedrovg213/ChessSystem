@@ -11,8 +11,8 @@ namespace ChessSystem {
             Playing play = new Playing();
 
             while ( !play.Finished ) {
-
                try {
+
                   Console.Clear();
                   Screen.PrintPlay( play );
 

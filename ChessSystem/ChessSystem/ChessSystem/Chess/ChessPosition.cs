@@ -20,7 +20,8 @@ namespace Chess {
 
       public Position ToPosition( ) {
 
-         return new Position( 8 - Line , Columm - 'A' );
+         return ( new Position( 8 - Line , Columm - 'A' ) );
+
       }
       public override string ToString( ) {
 

@@ -38,6 +38,7 @@ namespace board {
       public Pieces GetPiece( int _line , int _columm ) {
 
          return pieces[ _line , _columm ];
+
       }
       public Pieces GetPiece( Position _position ) {
 
